@@ -7,3 +7,6 @@ edition = "2021"
 
 [dependencies]
 async-openai = "0.10.3"
+dotenv = "0.15.0"
+async-std = { version = "1.10.0", features = ["attributes", "tokio1"] }
+regex = "1.9.1"
