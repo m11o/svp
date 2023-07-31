@@ -68,9 +68,21 @@ mod tests {
     }
 
     #[test]
+    fn it_return_option_none_when_examples_not_found() {
+        let examples = super::Parser::parse_examples("意味: 中毒性のある、依存性のある\n頻度: high (7)\n".to_string());
+        assert_eq!(examples, None);
+    }
+
+    #[test]
     fn it_parse_frequency() {
         let frequency = super::Parser::parse_frequency(RESPONDED_MESSAGE.to_string()).unwrap();
         assert_eq!(frequency, "high");
+    }
+
+    #[test]
+    fn it_return_option_none_when_frequency_not_found() {
+        let frequency = super::Parser::parse_frequency("意味: 中毒性のある、依存性のある\n".to_string());
+        assert_eq!(frequency, None);
     }
 
     #[test]

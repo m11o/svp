@@ -18,10 +18,10 @@ impl MeaningResponse {
     }
 
     pub fn parse(responded_message: String) -> MeaningResponse {
-        let meaning = Parser::parse_meaning(responded_message.clone()).unwrap();
-        let examples = Parser::parse_examples(responded_message.clone()).unwrap();
-        let frequency = Parser::parse_frequency(responded_message.clone()).unwrap();
-        let collocations = Parser::parse_collations(responded_message.clone()).unwrap();
+        let meaning = Parser::parse_meaning(responded_message.clone()).unwrap_or(String::from(""));
+        let examples = Parser::parse_examples(responded_message.clone()).unwrap_or(vec![]);
+        let frequency = Parser::parse_frequency(responded_message.clone()).unwrap_or(String::from("low"));
+        let collocations = Parser::parse_collations(responded_message.clone()).unwrap_or(vec![]);
 
         MeaningResponse::new(
             meaning,
