@@ -2,12 +2,12 @@ mod request;
 mod response;
 mod parser;
 
-pub struct WordMeaningSearcher {
-    request: request::Request
+pub struct WordMeaningSearcher <'b> {
+    request: request::Request<'b>
 }
 
-impl WordMeaningSearcher {
-    pub fn new(word: String) -> Self {
+impl <'b> WordMeaningSearcher <'b> {
+    pub fn new(word: &'b String) -> Self {
         Self {
             request: request::Request::new(word)
         }

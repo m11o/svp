@@ -1,9 +1,11 @@
 mod word_meaning_searcher;
+mod vocabulary_stocker;
 
 use std::env;
 use dotenv::dotenv;
 
 use word_meaning_searcher::WordMeaningSearcher;
+use vocabulary_stocker::VocabularyStocker;
 
 #[async_std::main]
 async fn main() {
@@ -15,10 +17,15 @@ async fn main() {
     };
     println!("{:?}", word);
 
-    let searcher = WordMeaningSearcher::new(word);
+    let searcher = WordMeaningSearcher::new(&word);
     let response = searcher.fetch_meaning().await;
-    println!("meaning: {:?}", response.meaning);
-    println!("examples: {:?}", response.examples);
-    println!("collocations: {:?}", response.collocations);
-    println!("frequency: {:?}", response.frequency);
+
+    let stocker = VocabularyStocker::new(
+        &word,
+        response.meaning,
+        response.examples,
+        response.collocations,
+        response.frequency
+    );
+    stocker.stock();
 }

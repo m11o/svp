@@ -11,13 +11,13 @@ use async_openai::{
     error::OpenAIError
 };
 
-pub struct Request {
-    word: String,
+pub struct Request <'a> {
+    word: &'a String,
     client: Client,
 }
 
-impl Request {
-    pub fn new(word: String) -> Self {
+impl <'a> Request <'a> {
+    pub fn new(word: &'a String) -> Self {
         Self {
             word,
             client: Client::new(),
