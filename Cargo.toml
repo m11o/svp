@@ -13,5 +13,5 @@ regex = "1.9.1"
 cynic = { version = "3", features = ["http-surf"] }
 surf = "2"
 
-[build-dependency]
+[build-dependencies]
 cynic-codegen = { version = "3" }
