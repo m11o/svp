@@ -1,5 +1,7 @@
 mod github;
 
+use github::create_issue::CreateIssueClient;
+
 pub struct VocabularyStocker <'a> {
     word: &'a String,
     meaning: String,
@@ -26,5 +28,34 @@ impl <'a> VocabularyStocker <'a> {
         println!("examples: {:?}", self.examples);
         println!("collocations: {:?}", self.collocations);
         println!("frequency: {}", self.frequency);
+
+        let client = CreateIssueClient::new(
+            self.word.clone(),
+            self.build_issue_body()
+        );
+        client.exec();
+    }
+
+    fn build_issue_body(&self) -> String {
+        format!("\
+            # 意味
+            <details>\n\
+            <summary>答えを見る</summary>\n\
+            {}\n\
+            </details>\n\
+            \n
+            # コロケーション\n\
+            {}\n\
+            \n
+            # 例文\n\
+            {}\n\
+            \n
+            # イメージ\n\
+            \n\
+            ",
+            self.meaning,
+            self.collocations.join("\n"),
+            self.examples.join("\n")
+        )
     }
 }
