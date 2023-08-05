@@ -62,29 +62,36 @@ impl<'a> VocabularyStocker<'a> {
         println!("collocations: {:?}", self.collocations);
         println!("frequency: {}", self.frequency);
 
-        let client = CreateIssueClient::new(self.word.clone(), self.build_issue_body());
         // TODO: 登録済みかどうかを確認
+        let issue_id: Id = self.execute_issue_creation().await;
+        let project_item_id: Id = self.execute_project_item_addition(issue_id).await;
+        println!("{:?}", project_item_id)
+    }
+
+    async fn execute_issue_creation(&self) -> Id {
+        let client = CreateIssueClient::new(self.word.clone(), self.build_issue_body());
         let response = client.exec().await;
-        let issue_id: Id = response
+        response
             .data
             .unwrap()
             .create_issue
             .expect("登録に失敗しました")
             .issue
             .expect("登録に失敗しました")
-            .id;
+            .id
+    }
 
+    async fn execute_project_item_addition(&self, issue_id: Id) -> Id {
         let client = AddIssueToProjectClient::new(issue_id);
         let response = client.exec().await;
-        let project_item_id = response
+        response
             .data
             .unwrap()
             .add_project_v2_item_by_id
             .expect("登録に失敗しました")
             .item
             .expect("登録に失敗しました")
-            .id;
-        println!("{:?}", project_item_id)
+            .id
     }
 
     fn build_issue_body(&self) -> String {
