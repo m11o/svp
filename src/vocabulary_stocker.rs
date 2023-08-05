@@ -38,19 +38,24 @@ impl <'a> VocabularyStocker <'a> {
     }
 
     fn build_issue_body(&self) -> String {
-        format!("\
-            # 意味
+        format!("# 意味\n\
             <details>\n\
             <summary>答えを見る</summary>\n\
+            \n\
+            ```\n\
             {}\n\
+            ```\n\
+            \n\
             </details>\n\
-            \n
+            \n\
             # コロケーション\n\
+            \n\
             {}\n\
-            \n
+            \n\
             # 例文\n\
+            \n\
             {}\n\
-            \n
+            \n\
             # イメージ\n\
             \n\
             ",
