@@ -1,11 +1,11 @@
-mod word_meaning_searcher;
 mod vocabulary_stocker;
+mod word_meaning_searcher;
 
-use std::env;
 use dotenv::dotenv;
+use std::env;
 
-use word_meaning_searcher::WordMeaningSearcher;
 use vocabulary_stocker::VocabularyStocker;
+use word_meaning_searcher::WordMeaningSearcher;
 
 #[async_std::main]
 async fn main() {
@@ -13,7 +13,7 @@ async fn main() {
 
     let word: String = match env::args().nth(1) {
         Some(word) => word,
-        None => panic!("Please provide a word to search")
+        None => panic!("Please provide a word to search"),
     };
     println!("{:?}", word);
 
@@ -25,7 +25,7 @@ async fn main() {
         response.meaning,
         response.examples,
         response.collocations,
-        response.frequency
+        response.frequency,
     );
     stocker.stock().await;
 }

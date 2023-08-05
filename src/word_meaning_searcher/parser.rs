@@ -8,9 +8,9 @@ impl Parser {
         match meaning_regex.captures(&responded_message) {
             Some(meaning_captures) => match meaning_captures.get(1) {
                 Some(meaning) => Some(meaning.as_str().to_owned()),
-                None => None
-            }
-            None => None
+                None => None,
+            },
+            None => None,
         }
     }
 
@@ -18,10 +18,17 @@ impl Parser {
         let examples_regex = Regex::new(r"例文:\s?\n((.+\n)+)").unwrap();
         match examples_regex.captures(&responded_message) {
             Some(examples_captures) => match examples_captures.get(1) {
-                Some(examples) => Some(examples.as_str().trim().split("\n").map(|example| example.to_string()).collect()),
-                None => None
+                Some(examples) => Some(
+                    examples
+                        .as_str()
+                        .trim()
+                        .split("\n")
+                        .map(|example| example.to_string())
+                        .collect(),
+                ),
+                None => None,
             },
-            None => None
+            None => None,
         }
     }
 
@@ -30,9 +37,9 @@ impl Parser {
         match frequency_regex.captures(&responded_message) {
             Some(frequency_captures) => match frequency_captures.get(1) {
                 Some(frequency) => Some(frequency.as_str().to_owned()),
-                None => None
+                None => None,
             },
-            None => None
+            None => None,
         }
     }
 
@@ -40,10 +47,17 @@ impl Parser {
         let collations_regex = Regex::new(r"collocations:\s?\n((.+\n?)+)").unwrap();
         match collations_regex.captures(&responded_message) {
             Some(examples_captures) => match examples_captures.get(1) {
-                Some(examples) => Some(examples.as_str().trim().split("\n").map(|example| example.to_string()).collect()),
-                None => None
+                Some(examples) => Some(
+                    examples
+                        .as_str()
+                        .trim()
+                        .split("\n")
+                        .map(|example| example.to_string())
+                        .collect(),
+                ),
+                None => None,
             },
-            None => None
+            None => None,
         }
     }
 }
@@ -62,14 +76,22 @@ mod tests {
     fn it_parse_examples() {
         let examples = super::Parser::parse_examples(RESPONDED_MESSAGE.to_string()).unwrap();
         assert_eq!(examples.len(), 3);
-        assert_eq!(examples[0], "1. Video games can be highly addictive, causing people to spend hours playing them.");
-        assert_eq!(examples[1], "2. The new smartphone app is so addictive that I can't stop using it.");
+        assert_eq!(
+            examples[0],
+            "1. Video games can be highly addictive, causing people to spend hours playing them."
+        );
+        assert_eq!(
+            examples[1],
+            "2. The new smartphone app is so addictive that I can't stop using it."
+        );
         assert_eq!(examples[2], "3. Some people find social media to be addictive and spend hours scrolling through their feeds.");
     }
 
     #[test]
     fn it_return_option_none_when_examples_not_found() {
-        let examples = super::Parser::parse_examples("意味: 中毒性のある、依存性のある\n頻度: high (7)\n".to_string());
+        let examples = super::Parser::parse_examples(
+            "意味: 中毒性のある、依存性のある\n頻度: high (7)\n".to_string(),
+        );
         assert_eq!(examples, None);
     }
 
@@ -81,7 +103,8 @@ mod tests {
 
     #[test]
     fn it_return_option_none_when_frequency_not_found() {
-        let frequency = super::Parser::parse_frequency("意味: 中毒性のある、依存性のある\n".to_string());
+        let frequency =
+            super::Parser::parse_frequency("意味: 中毒性のある、依存性のある\n".to_string());
         assert_eq!(frequency, None);
     }
 

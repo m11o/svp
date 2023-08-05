@@ -1,10 +1,14 @@
+use async_trait::async_trait;
 use cynic::{GraphQlResponse, Operation};
 use std::env;
 use std::marker::Send;
-use async_trait::async_trait;
 
 #[async_trait]
-pub trait Client<QueryStruct: for<'de> cynic::serde::Deserialize<'de> + 'static, VariableStruct: cynic::serde::Serialize + Send> {
+pub trait Client<
+    QueryStruct: for<'de> cynic::serde::Deserialize<'de> + 'static,
+    VariableStruct: cynic::serde::Serialize + Send,
+>
+{
     async fn exec(&self) -> GraphQlResponse<QueryStruct> {
         use cynic::http::SurfExt;
 

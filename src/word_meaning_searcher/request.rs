@@ -1,22 +1,20 @@
 use crate::word_meaning_searcher::response::MeaningResponse;
 
 use async_openai::{
-    Client,
+    error::OpenAIError,
     types::{
-        CreateChatCompletionRequestArgs,
-        ChatCompletionRequestMessage,
+        ChatCompletionRequestMessage, CreateChatCompletionRequest, CreateChatCompletionRequestArgs,
         Role,
-        CreateChatCompletionRequest
     },
-    error::OpenAIError
+    Client,
 };
 
-pub struct Request <'a> {
+pub struct Request<'a> {
     word: &'a String,
     client: Client,
 }
 
-impl <'a> Request <'a> {
+impl<'a> Request<'a> {
     pub fn new(word: &'a String) -> Self {
         Self {
             word,
@@ -26,12 +24,12 @@ impl <'a> Request <'a> {
 
     pub async fn fetch_meaning(&self) -> MeaningResponse {
         let request = match self.generate_request_args() {
-                Ok(request) => request,
-                Err(e) => panic!("Error: {}", e)
+            Ok(request) => request,
+            Err(e) => panic!("Error: {}", e),
         };
         let response = match self.client.chat().create(request).await {
             Ok(response) => response,
-            Err(e) => panic!("Error: {}", e)
+            Err(e) => panic!("Error: {}", e),
         };
         let result = response.choices[0].message.content.clone();
         MeaningResponse::parse(result)
@@ -52,11 +50,20 @@ impl <'a> Request <'a> {
     }
 
     fn generate_system_message() -> ChatCompletionRequestMessage {
-        Self::build_request_message(Role::System, "あなたは良き英語翻訳者であり、語彙も豊富です".to_string())
+        Self::build_request_message(
+            Role::System,
+            "あなたは良き英語翻訳者であり、語彙も豊富です".to_string(),
+        )
     }
 
     fn generate_user_message(&self) -> ChatCompletionRequestMessage {
-        Self::build_request_message(Role::User, format!("下記のフォーマットに従って右記の単語について教えてください: {}", self.word))
+        Self::build_request_message(
+            Role::User,
+            format!(
+                "下記のフォーマットに従って右記の単語について教えてください: {}",
+                self.word
+            ),
+        )
     }
 
     fn generate_assistant_message() -> ChatCompletionRequestMessage {

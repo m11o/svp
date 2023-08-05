@@ -1,15 +1,15 @@
+mod parser;
 mod request;
 mod response;
-mod parser;
 
-pub struct WordMeaningSearcher <'b> {
-    request: request::Request<'b>
+pub struct WordMeaningSearcher<'b> {
+    request: request::Request<'b>,
 }
 
-impl <'b> WordMeaningSearcher <'b> {
+impl<'b> WordMeaningSearcher<'b> {
     pub fn new(word: &'b String) -> Self {
         Self {
-            request: request::Request::new(word)
+            request: request::Request::new(word),
         }
     }
 

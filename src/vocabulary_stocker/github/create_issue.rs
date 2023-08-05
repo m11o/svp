@@ -1,18 +1,15 @@
+use crate::vocabulary_stocker::github::client::Client;
 use cynic::{Id, Operation};
 use std::env;
-use crate::vocabulary_stocker::github::client::Client;
 
 pub struct CreateIssueClient {
     body: String,
-    title: String
+    title: String,
 }
 
 impl CreateIssueClient {
     pub fn new(title: String, body: String) -> CreateIssueClient {
-        Self {
-            title,
-            body
-        }
+        Self { title, body }
     }
 }
 
@@ -22,13 +19,11 @@ impl Client<CreateIssue, CreateIssueField> for CreateIssueClient {
 
         let repository_id: Id = Id::new(env::var("VOCABULARY_REPOSITORY_ID").unwrap());
 
-        CreateIssue::build(
-            CreateIssueField {
-                body: self.body.clone(),
-                title: self.title.clone(),
-                repositoryId: repository_id,
-            }
-        )
+        CreateIssue::build(CreateIssueField {
+            body: self.body.clone(),
+            title: self.title.clone(),
+            repositoryId: repository_id,
+        })
     }
 }
 
@@ -62,11 +57,11 @@ pub struct CreateIssueField {
 #[derive(cynic::QueryFragment, Debug)]
 #[cynic(schema = "github")]
 pub struct CreateIssuePayload {
-    pub issue: Option<Issue>
+    pub issue: Option<Issue>,
 }
 
 #[derive(cynic::QueryFragment, Debug)]
 #[cynic(schema = "github")]
 pub struct Issue {
-    pub id: Id
+    pub id: Id,
 }
