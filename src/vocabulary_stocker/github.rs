@@ -1,7 +1,7 @@
 pub mod create_issue;
-mod client;
+pub mod client;
 
-mod Const {
+mod r#const {
     pub const PROJECT_STATUS_OPTION_LEARNING: &str = "f75ad846";
     pub const PROJECT_STATUS_OPTION_LEARNED: &str = "47fc9ee4";
     pub const PROJECT_STATUS_OPTION_IMMEDIATELY_USING: &str = "98236657";

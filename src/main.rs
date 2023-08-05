@@ -27,5 +27,5 @@ async fn main() {
         response.collocations,
         response.frequency
     );
-    stocker.stock();
+    stocker.stock().await;
 }

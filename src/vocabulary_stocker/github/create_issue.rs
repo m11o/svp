@@ -1,6 +1,6 @@
-use cynic::{Id, MutationBuilder, Operation, http::SurfExt};
+use cynic::{Id, Operation};
 use std::env;
-use crate::vocabulary_stocker::github::client;
+use crate::vocabulary_stocker::github::client::Client;
 
 pub struct CreateIssueClient {
     body: String,
@@ -16,19 +16,19 @@ impl CreateIssueClient {
     }
 }
 
-impl client::Client<createIssue, createIssueField> for CreateIssueClient {
-    fn build_query(&self) -> Operation<createIssue, createIssueField> {
-        use MutationBuilder;
+impl Client<CreateIssue, CreateIssueField> for CreateIssueClient {
+    fn build_query(&self) -> Operation<CreateIssue, CreateIssueField> {
+        use cynic::MutationBuilder;
 
-        let repositoryId: Id = Id::new(env::var("VOCABULARY_REPOSITORY_ID").unwrap());
-        let projectId: Id = Id::new(env::var("VOCABULARY_PROJECT_ID").unwrap());
+        let repository_id: Id = Id::new(env::var("VOCABULARY_REPOSITORY_ID").unwrap());
+        let project_id: Id = Id::new(env::var("VOCABULARY_PROJECT_ID").unwrap());
 
-        createIssue::build(
-            createIssueField {
+        CreateIssue::build(
+            CreateIssueField {
                 body: self.body.clone(),
                 title: self.title.clone(),
-                repositoryId,
-                projectIds: vec![projectId]
+                repository_id,
+                project_ids: Some(vec![project_id])
             }
         )
     }
@@ -41,36 +41,36 @@ mod schema {}
 #[cynic(
     schema = "github",
     graphql_type = "Mutation",
-    variables = "createIssueField"
+    variables = "CreateIssueField"
 )]
-struct createIssue {
+pub struct CreateIssue {
     #[arguments(
         input: {
             body: $body,
-            projectIds: $projectIds,
-            repositoryId: $repositoryId,
+            projectIds: $project_ids,
+            repositoryId: $repository_id,
             title: $title,
         }
     )]
-    pub CreateIssue: Option<CreateIssuePayload>,
+    pub create_issue: Option<CreateIssuePayload>,
 }
 
 #[derive(cynic::QueryVariables, Debug)]
-struct createIssueField {
+pub struct CreateIssueField {
     pub body: String,
-    pub projectIds: Vec<Id>,
-    pub repositoryId: Id,
+    pub project_ids: Option<Vec<Id>>,
+    pub repository_id: Id,
     pub title: String,
 }
 
 #[derive(cynic::QueryFragment, Debug)]
 #[cynic(schema = "github")]
-struct CreateIssuePayload {
+pub struct CreateIssuePayload {
     pub issue: Option<Issue>
 }
 
 #[derive(cynic::QueryFragment, Debug)]
 #[cynic(schema = "github")]
-struct Issue {
-    pub id: cynic::Id
+pub struct Issue {
+    pub id: Id
 }

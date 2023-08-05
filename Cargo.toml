@@ -12,6 +12,7 @@ async-std = { version = "1.10.0", features = ["attributes", "tokio1"] }
 regex = "1.9.1"
 cynic = { version = "3", features = ["http-surf"] }
 surf = "2"
+async-trait = "0.1.72"
 
 [build-dependencies]
 cynic-codegen = { version = "3" }

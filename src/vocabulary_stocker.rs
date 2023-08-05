@@ -1,6 +1,7 @@
 mod github;
 
 use github::create_issue::CreateIssueClient;
+use github::client::Client;
 
 pub struct VocabularyStocker <'a> {
     word: &'a String,
@@ -21,7 +22,7 @@ impl <'a> VocabularyStocker <'a> {
         }
     }
 
-    pub fn stock(&self) {
+    pub async fn stock(&self) {
         println!("saving...");
         println!("word: {}", self.word);
         println!("meaning: {}", self.meaning);
@@ -33,7 +34,7 @@ impl <'a> VocabularyStocker <'a> {
             self.word.clone(),
             self.build_issue_body()
         );
-        client.exec();
+        client.exec().await;
     }
 
     fn build_issue_body(&self) -> String {
