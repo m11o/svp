@@ -1,6 +1,6 @@
 pub mod client;
 pub mod create_issue;
-pub mod client;
+pub mod add_issue_to_project_client;
 
 mod r#const {
     pub const PROJECT_STATUS_OPTION_LEARNING: &str = "f75ad846";
