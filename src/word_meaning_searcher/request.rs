@@ -25,11 +25,11 @@ impl<'a> Request<'a> {
     pub async fn fetch_meaning(&self) -> MeaningResponse {
         let request = match self.generate_request_args() {
             Ok(request) => request,
-            Err(e) => panic!("Error: {}", e),
+            Err(e) => panic!("Error: {:?}", e),
         };
         let response = match self.client.chat().create(request).await {
             Ok(response) => response,
-            Err(e) => panic!("Error: {}", e),
+            Err(e) => panic!("Error: {:?}", e),
         };
         let result = response.choices[0].message.content.clone();
         MeaningResponse::parse(result)
