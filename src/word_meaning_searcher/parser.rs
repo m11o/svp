@@ -39,7 +39,7 @@ impl Parser {
         let frequency_regex = Regex::new(r"頻度:\s(.+?)\s?\(").unwrap();
         match frequency_regex.captures(&responded_message) {
             Some(frequency_captures) => match frequency_captures.get(1) {
-                Some(frequency) => Some(Frequency::str2enum(frequency.as_str().to_string())),
+                Some(frequency) => Some(Frequency::str2enum(frequency.as_str())),
                 None => None,
             },
             None => None,
