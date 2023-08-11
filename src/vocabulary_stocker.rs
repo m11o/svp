@@ -7,7 +7,7 @@ use cynic::Id;
 use crate::vocabulary_stocker::github::{
     add_issue_to_project_client::AddIssueToProjectClient,
     update_project_item_field::UpdateProjectItemFieldClient,
-    r#const
+    constants
 };
 
 use std::env;
@@ -93,10 +93,10 @@ impl<'a> VocabularyStocker<'a> {
 
     fn frequency2select_option_id(&self) -> String {
         match self.frequency {
-            Frequency::VeryHigh => String::from(r#const::PROJECT_FREQUENCY_OPTION_VERY_HIGH),
-            Frequency::High => String::from(r#const::PROJECT_FREQUENCY_OPTION_HIGH),
-            Frequency::Middle => String::from(r#const::PROJECT_FREQUENCY_OPTION_MIDDLE),
-            Frequency::Low => String::from(r#const::PROJECT_FREQUENCY_OPTION_LOW)
+            Frequency::VeryHigh => String::from(constants::PROJECT_FREQUENCY_OPTION_VERY_HIGH),
+            Frequency::High => String::from(constants::PROJECT_FREQUENCY_OPTION_HIGH),
+            Frequency::Middle => String::from(constants::PROJECT_FREQUENCY_OPTION_MIDDLE),
+            Frequency::Low => String::from(constants::PROJECT_FREQUENCY_OPTION_LOW)
         }
     }
 
