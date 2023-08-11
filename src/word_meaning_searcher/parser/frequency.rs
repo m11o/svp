@@ -9,12 +9,13 @@ pub enum Frequency {
 }
 
 impl Frequency {
-    pub fn str2enum(frequency: String) -> Frequency {
+    pub fn str2enum(frequency: &str) -> Frequency {
         match frequency {
-            String::from("very high") => Frequency::VeryHigh,
-            String::from("high")      => Frequency::High,
-            String::from("middle")    => Frequency::Middle,
-            String::from("low")       => Frequency::Low
+            "very high" => Frequency::VeryHigh,
+            "high"      => Frequency::High,
+            "middle"    => Frequency::Middle,
+            "low"       => Frequency::Low,
+            _           => Frequency::Low
         }
     }
 }
