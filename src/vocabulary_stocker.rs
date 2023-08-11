@@ -52,7 +52,7 @@ impl<'a> VocabularyStocker<'a> {
         let project_item_id: Id = self.execute_project_item_addition(issue_id).await;
         let select_option_id = self.frequency2select_option_id();
 
-        self.execute_to_update_project_item_field(project_item_id, select_option_id).await;
+        self.execute_to_update_frequency(project_item_id, select_option_id).await;
     }
 
     async fn execute_issue_creation(&self) -> Id {
@@ -81,7 +81,7 @@ impl<'a> VocabularyStocker<'a> {
             .id
     }
 
-    async fn execute_to_update_project_item_field(&self, item_id: Id, select_option_id: String) {
+    async fn execute_to_update_frequency(&self, item_id: Id, select_option_id: String) {
         let field_id = Id::new(env::var("VOCABULARY_STATUS_FIELD_ID").unwrap());
         let client = UpdateProjectItemFieldClient::new(
             item_id,
