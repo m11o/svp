@@ -49,6 +49,7 @@ pub struct AddIssueToProject {
 }
 
 #[derive(cynic::QueryVariables, Debug)]
+#[cynic(rename_all="camelCase")]
 pub struct AddIssueToProjectField {
     pub contentId: Id,
     pub projectId: Id

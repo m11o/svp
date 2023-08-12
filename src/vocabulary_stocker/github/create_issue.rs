@@ -34,7 +34,7 @@ mod schema {}
 #[cynic(
     schema = "github",
     graphql_type = "Mutation",
-    variables = "CreateIssueField"
+    variables = "CreateIssueField",
 )]
 pub struct CreateIssue {
     #[arguments(
@@ -48,6 +48,7 @@ pub struct CreateIssue {
 }
 
 #[derive(cynic::QueryVariables, Debug)]
+#[cynic(rename_all="camelCase")]
 pub struct CreateIssueField {
     pub body: String,
     pub repositoryId: Id,
