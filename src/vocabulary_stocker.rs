@@ -13,6 +13,7 @@ use crate::vocabulary_stocker::github::{
 };
 
 use std::env;
+use crate::vocabulary_stocker::github::issue_message::IssueMessage;
 
 use crate::word_meaning_searcher::parser::frequency::Frequency;
 
@@ -65,7 +66,8 @@ impl<'a> VocabularyStocker<'a> {
     }
 
     async fn execute_issue_creation(&self) -> Id {
-        let client = CreateIssueClient::new(self.word.clone(), self.build_issue_body());
+        let issue_message = IssueMessage::new(&self.meaning, &self.collocations, &self.examples);
+        let client = CreateIssueClient::new(self.word.clone(), issue_message.build_issue_body());
         let response = client.exec().await;
         response
             .data
@@ -107,34 +109,5 @@ impl<'a> VocabularyStocker<'a> {
             Frequency::Middle => String::from(constants::PROJECT_FREQUENCY_OPTION_MIDDLE),
             Frequency::Low => String::from(constants::PROJECT_FREQUENCY_OPTION_LOW)
         }
-    }
-
-    fn build_issue_body(&self) -> String {
-        format!("\
-            # 意味\n\
-            <details>\n\
-            <summary>答えを見る</summary>\n\
-            \n\
-            ```\n\
-            {meaning}\n\
-            ```\n\
-            \n\
-            </details>\n\
-            \n\
-            # コロケーション\n\
-            \n\
-            {collocations}\n\
-            \n\
-            # 例文\n\
-            \n\
-            {examples}\n\
-            \n\
-            # イメージ\n\
-            \n\
-            ",
-            meaning = self.meaning,
-            collocations = self.collocations.join("\n"),
-            examples = self.examples.join("\n")
-        )
     }
 }
