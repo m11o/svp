@@ -2,14 +2,14 @@ use cynic::{Id, Operation};
 use std::env;
 use crate::vocabulary_stocker::github::client::Client;
 
-pub struct UpdateProjectItemFieldClient {
-    project_item_id: Id,
+pub struct UpdateProjectItemFieldClient<'a> {
+    project_item_id: &'a Id,
     field_id: Id,
     select_option_id: String
 }
 
-impl UpdateProjectItemFieldClient {
-    pub fn new(project_item_id: Id, field_id: Id, select_option_id: String) -> UpdateProjectItemFieldClient {
+impl<'b> UpdateProjectItemFieldClient<'b> {
+    pub fn new(project_item_id: &'b Id, field_id: Id, select_option_id: String) -> UpdateProjectItemFieldClient {
         Self {
             project_item_id,
             field_id,
@@ -18,7 +18,7 @@ impl UpdateProjectItemFieldClient {
     }
 }
 
-impl Client<UpdateProjectItemField, UpdateProjectItemFieldArgument> for UpdateProjectItemFieldClient {
+impl<'b> Client<UpdateProjectItemField, UpdateProjectItemFieldArgument> for UpdateProjectItemFieldClient<'b> {
     fn build_query(&self) -> Operation<UpdateProjectItemField, UpdateProjectItemFieldArgument> {
         use cynic::MutationBuilder;
 
