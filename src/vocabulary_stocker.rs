@@ -1,7 +1,9 @@
 mod github;
+mod sled_client;
 
 use github::client::Client;
 use github::create_issue::CreateIssueClient;
+use sled_client::SledClient;
 
 use cynic::Id;
 use crate::vocabulary_stocker::github::{
@@ -47,12 +49,19 @@ impl<'a> VocabularyStocker<'a> {
         println!("collocations: {:?}", self.collocations);
         println!("frequency: {}", self.frequency);
 
-        // TODO: 登録済みかどうかを確認
+        let db_client = SledClient::new();
+        if db_client.is_saved_key(self.word.clone()) {
+            println!("already registered");
+            return;
+        }
+
         let issue_id: Id = self.execute_issue_creation().await;
         let project_item_id: Id = self.execute_project_item_addition(issue_id).await;
         let select_option_id = self.frequency2select_option_id();
 
-        self.execute_to_update_frequency(project_item_id, select_option_id).await;
+        self.execute_to_update_frequency(&project_item_id, select_option_id).await;
+
+        db_client.create(self.word.clone(), project_item_id.into_inner());
     }
 
     async fn execute_issue_creation(&self) -> Id {
@@ -81,7 +90,7 @@ impl<'a> VocabularyStocker<'a> {
             .id
     }
 
-    async fn execute_to_update_frequency(&self, item_id: Id, select_option_id: String) {
+    async fn execute_to_update_frequency(&self, item_id: &Id, select_option_id: String) {
         let field_id = Id::new(env::var("VOCABULARY_STATUS_FIELD_ID").unwrap());
         let client = UpdateProjectItemFieldClient::new(
             item_id,
