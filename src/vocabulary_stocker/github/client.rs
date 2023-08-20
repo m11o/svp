@@ -12,7 +12,7 @@ pub trait Client<
     async fn exec(&self) -> GraphQlResponse<QueryStruct> {
         use cynic::http::SurfExt;
 
-        let token = env::var("GITHUB_TOKEN").expect("GITHUB_TOKEN env var must be set");
+        let token = env::var("SVP_GITHUB_TOKEN").expect("GITHUB_TOKEN env var must be set");
 
         surf::post("https://api.github.com/graphql")
             .header("Authorization", format!("Bearer {}", token))
